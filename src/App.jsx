@@ -49,62 +49,54 @@ const KimonoBusinessSimulator = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
- // 1. データ取得 (Load)
+  // 1. データ取得 (Load)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // ★重要: redirect: "follow" を明示
-        const response = await fetch(GAS_API_URL, {
-            method: "GET",
-            redirect: "follow",
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
+        const response = await fetch(GAS_API_URL);
         const result = await response.json();
-        // ... (以下同じ) ...
-        if (Array.isArray(result) && result.length > 0) {
+        
+        if (result && result.length > 0) {
           setData(result);
         } else {
+          // データが空なら初期データを生成してセット
           setData(generateInitialData());
         }
       } catch (error) {
-        // ... (エラー処理) ...
+        console.error("Fetch error:", error);
+        alert("データの読み込みに失敗しました。初期データを表示します。");
+        setData(generateInitialData());
+      } finally {
+        setIsLoading(false);
       }
-      // ...
     };
+
     fetchData();
   }, []);
 
   // 2. データ保存 (Save)
-  cconst handleSave = async () => {
+  const handleSave = async () => {
     setIsSaving(true);
     try {
-      // ★重要: Content-Typeを text/plain に偽装して送る
-      // これによりブラウザの厳しいCORSチェック(Preflight)を一部回避しやすくなります
-      const response = await fetch(GAS_API_URL, {
+      // GASはPOSTのPreflight(OPTIONS)が苦手なため、no-corsモードやtext/plainを使う工夫が必要
+      // ここでは最もシンプルな text/plain でJSON文字列を送る方法をとります
+      await fetch(GAS_API_URL, {
         method: 'POST',
-        redirect: 'follow',
+        mode: 'no-cors',
         headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
+          'Content-Type': 'text/plain', 
         },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       alert('Google Spreadsheetsに保存しました！');
     } catch (error) {
       console.error("Save error:", error);
-      alert(`保存に失敗しました: ${error.message}`);
+      alert('保存に失敗しました。コンソールを確認してください。');
     } finally {
       setIsSaving(false);
     }
   };
+
   // 集計値の計算
   const summary = useMemo(() => {
     const totalSales = data.reduce((acc, curr) => acc + (Number(curr.sales) || 0), 0);

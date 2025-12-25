@@ -3,7 +3,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { Calculator, Calendar, TrendingUp, DollarSign, Save, RefreshCw, Plus, Minus, Activity, Loader2 } from 'lucide-react';
 
 // ★ここにGASのウェブアプリURLを貼り付けてください
-const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5SL_3fdcpK5x7eVDxtFQum9EIulNqHm0la6LoM3V0RQ2h9aUoMbyENlC4dXbFQkJl1Q/exec';
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyldlQz0R5ui1qv3s_Vx3Tb3rP5xUu2tsfJc1CsNYJrDm0OoWaKUGZLfqUh2wGxmELsoQ/exec';
 
 // 初期データ生成ヘルパー（初回アクセス時やデータがない場合用）
 const generateInitialData = () => {

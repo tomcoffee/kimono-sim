@@ -50,33 +50,33 @@ const KimonoBusinessSimulator = () => {
   const [isSaving, setIsSaving] = useState(false);
 
  // 1. データ取得 (Load)
- useEffect(() => {
-  const fetchData = async () => {
-    try {
-      // ★重要: redirect: "follow" を明示
-      const response = await fetch(GAS_API_URL, {
-          method: "GET",
-          redirect: "follow",
-      });
-      
-      if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-      }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // ★重要: redirect: "follow" を明示
+        const response = await fetch(GAS_API_URL, {
+            method: "GET",
+            redirect: "follow",
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
 
-      const result = await response.json();
-      // ... (以下同じ) ...
-      if (Array.isArray(result) && result.length > 0) {
-         setData(result);
-      } else {
-         setData(generateInitialData());
+        const result = await response.json();
+        // ... (以下同じ) ...
+        if (Array.isArray(result) && result.length > 0) {
+          setData(result);
+        } else {
+          setData(generateInitialData());
+        }
+      } catch (error) {
+        // ... (エラー処理) ...
       }
-    } catch (error) {
-       // ... (エラー処理) ...
-    }
-    // ...
-  };
-  fetchData();
-}, []);
+      // ...
+    };
+    fetchData();
+  }, []);
 
   // 2. データ保存 (Save)
   cconst handleSave = async () => {

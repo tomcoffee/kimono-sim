@@ -82,6 +82,7 @@ const KimonoBusinessSimulator = () => {
       // ここでは最もシンプルな text/plain でJSON文字列を送る方法をとります
       await fetch(GAS_API_URL, {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'text/plain', 
         },
